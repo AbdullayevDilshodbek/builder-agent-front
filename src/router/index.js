@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+
+const pathView = (path) => {
+  return () => import(`@/views/${path}.vue`);
+};
 
 Vue.use(VueRouter)
 
@@ -8,16 +11,25 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: pathView('Home'),
+    children: [
+      {
+        path: '/',
+        name: 'User',
+        component: pathView('user/User')
+      },
+      {
+        path: '/location',
+        name: 'Location',
+        component: pathView('location/Location')
+      },
+    ]
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    path: '/login',
+    name: 'login',
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+      return import('../views/Login.vue')
     }
   }
 ]
@@ -29,3 +41,20 @@ const router = new VueRouter({
 })
 
 export default router
+
+router.beforeEach((to, from, next) => {
+  const session = localStorage.getItem("access_token");
+  const publicPages = ["/login"];
+  const notPublicPages = !publicPages.includes(to.path);
+  let logged = false;
+  if (session) {
+    logged = true;
+  }
+  if (logged && !notPublicPages) {
+    next("/");
+  } else if (!logged && notPublicPages) {
+    next("/login");
+  } else {
+    next();
+  }
+});
