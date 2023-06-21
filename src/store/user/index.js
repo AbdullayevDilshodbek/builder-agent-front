@@ -1,15 +1,19 @@
 import axios from "@/utils/axios";
 
 const state = () => ({
-    users: []
+    users: [],
+    activeUsers: [],
+    notCashierUsers: []
 })
 
 const getters = {
     getUsers: state => state.users,
+    getActiveUsers: state => state.activeUsers,
+    getNotCashierUsers: state => state.notCashierUsers
 }
 
 const actions = {
-    async fetchUser({ commit }, {search, page}) {
+    async fetchUser({ commit }, { search, page }) {
         try {
             const response = await axios.get('/users', {
                 params: {
@@ -47,10 +51,28 @@ const actions = {
             return Promise.reject(error)
         }
     },
-    async getAuth({}, payload){
+    async getAuth({ }, payload) {
         try {
-            const res = axios.get('user/auth')
+            const res = await axios.get('user/auth')
             return Promise.resolve(res)
+        } catch (error) {
+            return Promise.reject(error)
+        }
+    },
+    async fetchActiveUsers({commit}, payload) {
+        try {
+            const res = await axios.get('user/active_users')
+            commit('SET_ACTIVE_USERS_DATA', {data: res.data})
+            return Promise.resolve(res);
+        } catch (error) {
+            return Promise.reject(error)
+        }
+    },
+    async fetchNotCashierUsers({commit}, payload) {
+        try {
+            const res = await axios.get('user/not_cashiers')
+            commit('SET_NOT_CASHIER_USERS_DATA', {data: res.data})
+            return Promise.resolve(res);
         } catch (error) {
             return Promise.reject(error)
         }
@@ -61,9 +83,12 @@ const mutations = {
     SET_USERS_DATA: (state, { data }) => {
         state.users = data.data
     },
-    SET_CURRENT_PAGE(state, data) {
-        state.users.meta['current_page'] = data;
+    SET_ACTIVE_USERS_DATA: (state, {data}) => {
+        state.activeUsers = data.data
     },
+    SET_NOT_CASHIER_USERS_DATA: (state, {data}) => {
+        state.notCashierUsers = data.data
+    }
 }
 
 export default {

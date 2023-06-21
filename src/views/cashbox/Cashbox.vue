@@ -7,9 +7,8 @@
                     <v-toolbar color="primary" dark class="text-h4 mb-4">{{ action == 'update' ? 'Yangilash' : "Qo'shish"
                     }}</v-toolbar>
                     <v-card-text>
-                        <v-text-field outlined required label="Xudud" v-model="location.title"></v-text-field>
                         <v-autocomplete v-model="user.id" :items="users" dense item-value="id" item-text="full_name"
-                            :clearable="true" outlined label="Masul shaxs"></v-autocomplete>
+                            :clearable="true" outlined label="Kassir"></v-autocomplete>
                     </v-card-text>
                     <v-divider></v-divider>
                     <v-card-actions class="justify-end">
@@ -23,7 +22,8 @@
         <div>
             <v-row>
                 <v-col cols="2" class="ml-10">
-                    <v-text-field rounded outlined dense label="Qidirish" @keyup.enter="fetchLocation()" v-model="search" />
+                    <v-text-field rounded outlined dense label="Qidirish" @keyup.enter="fetchCashboxes()" v-model="search">
+                    </v-text-field>
                 </v-col>
                 <v-spacer></v-spacer>
                 <v-col cols="2">
@@ -37,12 +37,12 @@
             </v-row>
         </div>
         <!-- table -->
-        <v-data-table :headers="headers" hide-default-footer :items="locations" disable-sort class="elevation-1"
-            item-key="id" loading="true">
+        <v-data-table hide-default-footer :headers="headers" :items="cashboxes" class="elevation-1" item-key="id"
+            loading="true" disable-sort>
             <template v-slot:item.actions="{ item }">
-                <v-btn v-if="auth.status == 'admin'" @click="openDialog(item)" color="success" dense icon rounded>
+                <!-- <v-btn v-if="auth.status == 'admin'" @click="openDialog(item)" color="success" dense icon rounded>
                     <v-icon>mdi-border-color</v-icon>
-                </v-btn>
+                </v-btn> -->
                 <v-btn v-if="auth.status == 'admin'" :color="item.active ? 'success' : 'red'" icon
                     @click="changeActive(item.id)">
                     <v-icon v-text="item.active == true ? 'mdi-toggle-switch' : 'mdi-toggle-switch-off'"></v-icon>
@@ -50,15 +50,16 @@
             </template>
         </v-data-table>
         <v-pagination :length="last_page" v-model="page"></v-pagination>
+        {{ user.id }}
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
 export default {
-    name: 'Location',
+    name: 'Cashbox',
     watch: {
         page() {
-            this.fetchLocation()
+            this.fetchCashboxes()
         }
     },
     data() {
@@ -69,92 +70,69 @@ export default {
             auth: JSON.parse(localStorage.getItem('user')),
             dialog: false,
             action: 'update',
-            location: {},
-            users: [],
+            cashbox: {},
             user: {},
             headers: [
                 { text: '#', value: 'id' },
-                { text: 'Xudud', value: 'title' },
-                { text: 'Masul shaxs', value: 'attached_user.full_name' },
+                { text: 'Kassir', value: 'user.full_name' },
+                { text: 'Balans', value: 'balance' },
+                { text: 'Muzlatilgan', value: 'freezed_value' },
                 { text: 'Amallar', value: 'actions' },
             ]
         }
     },
     computed: {
         ...mapGetters({
-            locations: 'location/getLocations'
+            cashboxes: 'cashbox/getCashboxes',
+            users: 'user/getNotCashierUsers'
         })
     },
     async created() {
-        await this.fetchLocation()
+        await this.fetchCashboxes()
     },
     methods: {
-        async fetchLocation() {
-            try {
-                const { data } = await this.$store.dispatch('location/fetchLocations', {
-                    search: this.search,
-                    page: this.page
-                })
-                this.last_page = data.meta.last_page
-            } catch (error) {
-                this.$toast.error(error.response.data.message)
-            }
+        async fetchCashboxes() {
+            const { data } = await this.$store.dispatch('cashbox/fetchCashboxes', {
+                search: this.search,
+                page: this.page
+            })
+            this.last_page = data.meta.last_page
         },
-        async changeActive(id) {
-            try {
-                const res = await this.$store.dispatch('location/changeActive', id)
-                this.$toast.success(res.message)
-                this.fetchLocation()
-            } catch (error) {
-                this.$toast.error(error.response.data.message)
-            }
-        },
-        async openDialog(location) {
-            const res = await this.$store.dispatch('user/fetchActiveUsers')
-            this.users = res.data.data
-            if (location) {
-                this.location = { ...location }
+        async openDialog(cashbox) {
+            await this.$store.dispatch('user/fetchNotCashierUsers')
+            if (cashbox) {
                 this.action = 'update'
             } else {
-                this.location = {}
                 this.action = 'create'
             }
             this.dialog = true
         },
-        save() {
-            if (this.action == 'create') {
-                this.createLocation()
-            } else {
-                this.updateLocation()
-            }
-        },
-        async createLocation() {
+        async changeActive(id) {
             try {
-                const payload = {
-                    title: this.location.title,
-                    user_id: this.user.id
-                }
-                await this.$store.dispatch('location/createLocation', payload)
-                await this.fetchLocation()
-                this.$toast.success('Amalyot bajarildi')
-                this.dialog = false;
+                const res = await this.$store.dispatch('cashbox/changeActive', id)
+                this.fetchCashboxes()
+                this.$toast.success(res.message)
             } catch (error) {
                 this.$toast.error(error.response.data.message)
             }
         },
-        async updateLocation() {
+        async createCashbox(){
             try {
                 const payload = {
-                    id: this.location.id,
-                    title: this.location.title,
                     user_id: this.user.id
                 }
-                await this.$store.dispatch('location/updateLocation', payload)
-                await this.fetchLocation()
-                this.$toast.success('Amalyot bajarildi')
-                this.dialog = false;
+                const res = await this.$store.dispatch('cashbox/createCashbox', payload)
+                this.dialog = false
+                this.fetchCashboxes()
+                this.$toast.success(res.message)
             } catch (error) {
+                console.log(error);
                 this.$toast.error(error.response.data.message)
+            }
+        },
+        save(){
+            if(this.action == 'create'){
+                this.createCashbox()
             }
         }
     }

@@ -11,6 +11,7 @@
 
       <v-list>
         <v-list-item v-for="(link, index) of links" :key="index" link @click="goPage(link.path)">  
+
           <v-list-item-icon>
               <v-icon>{{ link.icon }}</v-icon>
             </v-list-item-icon>
@@ -39,13 +40,27 @@ export default {
         icon: 'mdi-account-group',
         title: 'Foydalanuvchilar',
         path: '/',
-        rule: 'admin'
+        rule: 'admin',
       },
       {
         id: 2,
-        icon: 'mdi-account-group',
+        icon: 'mdi-city',
         title: 'Manzillar',
         path: '/location',
+        rule: 'admin'
+      },
+      {
+        id: 3, 
+        icon: 'mdi-subtitles-outline',
+        title: 'Xarjat turlari',
+        path: '/cost-type',
+        rule: 'admin'
+      },
+      {
+        id: 4, 
+        icon: 'mdi-account-cash-outline',
+        title: 'Kassalar',
+        path: '/cashbox',
         rule: 'admin'
       }
     ],

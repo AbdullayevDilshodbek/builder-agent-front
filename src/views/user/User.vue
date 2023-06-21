@@ -109,7 +109,7 @@ export default {
                 })
                 this.last_page = data.meta.last_page
             } catch (error) {
-                console.log(error);
+                this.$toast.error(error.response.data.message)
             }
         },
         async changeActive(id) {
@@ -118,7 +118,7 @@ export default {
                 this.$toast.success(res.message)
                 this.fetchUser()
             } catch (error) {
-
+                this.$toast.error(error.response.data.message)
             }
         },
         openDialog(user = null) {

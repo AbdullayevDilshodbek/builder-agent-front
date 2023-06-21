@@ -18,7 +18,6 @@ api.interceptors.request.use(request => {
 })
 
 api.interceptors.response.use(response => response, async error => {
-    console.log(error);
     if (error.response.status === 401) {
         localStorage.clear();
         window.location.reload();

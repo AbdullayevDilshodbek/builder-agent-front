@@ -23,6 +23,16 @@ const routes = [
         name: 'Location',
         component: pathView('location/Location')
       },
+      {
+        path: '/cost-type',
+        name: 'CostType',
+        component: pathView('costType/CostType')
+      },
+      {
+        path:'/cashbox',
+        name: 'Cashbox',
+        component: pathView('cashbox/Cashbox')
+      }
     ]
   },
   {
