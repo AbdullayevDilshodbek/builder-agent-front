@@ -1,11 +1,13 @@
 import axios from "@/utils/axios"
 
 const state = () => ({
-    locations: []
+    locations: [],
+    active_locations: []
 })
 
 const getters = {
-    getLocations: state => state.locations
+    getLocations: state => state.locations,
+    getActiveLocations: state => state.active_locations
 }
 
 const actions = {
@@ -43,12 +45,24 @@ const actions = {
         } catch (error) {
             return Promise.reject(error)
         }
-    }
+    },
+    async fetchActiveLocations({ commit }, payload) {
+        try {
+            const res = await axios.get('/location/all_active')
+            commit('SET_ACTIVE_LOCATION_DATA', { data: res.data })
+            return Promise.resolve(res)
+        } catch (error) {
+            return Promise.reject(error)
+        }
+    },
 }
 
 const mutations = {
     SET_LOCATION_DATA: (state, { data }) => {
         state.locations = data.data
+    },
+    SET_ACTIVE_LOCATION_DATA: (state, { data }) => {
+        state.active_locations = data.data
     }
 }
 

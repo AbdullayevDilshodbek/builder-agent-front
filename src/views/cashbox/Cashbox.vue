@@ -111,9 +111,9 @@ export default {
             try {
                 const res = await this.$store.dispatch('cashbox/changeActive', id)
                 this.fetchCashboxes()
-                this.$toast.success(res.message)
+                this.$toast.success(res.data.message)
             } catch (error) {
-                this.$toast.error(error.response.data.message)
+                this.$toast.error(Object.values(error.response.data.message)[0][0])
             }
         },
         async createCashbox(){
@@ -124,10 +124,9 @@ export default {
                 const res = await this.$store.dispatch('cashbox/createCashbox', payload)
                 this.dialog = false
                 this.fetchCashboxes()
-                this.$toast.success(res.message)
+                this.$toast.success(res.data.message)
             } catch (error) {
-                console.log(error);
-                this.$toast.error(error.response.data.message)
+                this.$toast.error(Object.values(error.response.data.message)[0][0])
             }
         },
         save(){

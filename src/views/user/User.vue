@@ -109,16 +109,16 @@ export default {
                 })
                 this.last_page = data.meta.last_page
             } catch (error) {
-                this.$toast.error(error.response.data.message)
+                // this.$toast.error(Object.values(error.response.data.message)[0][0])
             }
         },
         async changeActive(id) {
             try {
                 const res = await this.$store.dispatch('user/changeActive', id)
-                this.$toast.success(res.message)
+                this.$toast.success(res.data.message)
                 this.fetchUser()
             } catch (error) {
-                this.$toast.error(error.response.data.message)
+                this.$toast.error(Object.values(error.response.data.message)[0][0])
             }
         },
         openDialog(user = null) {
@@ -142,11 +142,11 @@ export default {
         async updateUser() {
             try {
                 const res = await this.$store.dispatch(`user/updateUser`, this.user)
-                this.$toast.success(res.message)
+                this.$toast.success(res.data.message)
                 this.dialog = false
                 this.user = {}
             } catch (error) {
-                this.$toast.error(error.response.data.message)
+                this.$toast.error(Object.values(error.response.data.message)[0][0])
             }
         },
         async createUser() {
@@ -155,9 +155,9 @@ export default {
                 const res = await this.$store.dispatch('user/createUser', this.user)
                 this.dialog = false
                 this.user = {}
-                this.$toast.success(res.message)
+                this.$toast.success(res.data.message)
             } catch (error) {
-                this.$toast.error(error.response.data.message)
+                this.$toast.error(Object.values(error.response.data.message)[0][0])
             }
         }
     }

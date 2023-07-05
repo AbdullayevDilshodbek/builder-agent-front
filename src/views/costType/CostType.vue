@@ -103,7 +103,7 @@ export default {
                 await this.fetchCostTypes()
                 this.$toast.success('Amalyot bajarildi')
             } catch (error) {
-                this.$toast.error(error.response.data.message)
+                this.$toast.error(Object.values(error.response.data.message)[0][0])
             }
         },
         openDialog(costType) {
@@ -127,22 +127,23 @@ export default {
             try {
                 const res = await this.$store.dispatch('costType/createCostType', this.costType)
                 await this.fetchCostTypes()
-                this.$toast.success(res.message)
+                console.log(res);
+                this.$toast.success(res.data.message)
                 this.dialog = false
                 this.costType = {}
             } catch (error) {
-                this.$toast.error(error.response.data.message)
+                this.$toast.error(Object.values(error.response.data.message)[0][0])
             }
         },
         async updateCostType() {
             try {
                 const res = await this.$store.dispatch('costType/updateCostType', this.costType)
                 await this.fetchCostTypes()
-                this.$toast.success(res.message)
+                this.$toast.success(res.data.message)
                 this.dialog = false
                 this.costType = {}
             } catch (error) {
-                this.$toast.error(error.response.data.message)
+                this.$toast.error(Object.values(error.response.data.message)[0][0])
             }
         }
     }

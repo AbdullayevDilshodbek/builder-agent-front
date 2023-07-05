@@ -10,9 +10,9 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(request => {
-    const access_token = localStorage.getItem('access_token')
-    if (access_token) {
-        request.headers.common['Authorization'] = `Bearer ${access_token}`
+    const access_token_gm = localStorage.getItem('access_token_gm')
+    if (access_token_gm) {
+        request.headers.common['Authorization'] = `Bearer ${access_token_gm}`
     }
     return request
 })

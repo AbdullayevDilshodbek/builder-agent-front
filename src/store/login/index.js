@@ -9,7 +9,7 @@ const actions = {
         return new Promise(((resolve, reject) => {
             axios.post(process.env.VUE_APP_AUTH_URL, payload).then(response => {
                 const token = response.data
-                localStorage.access_token = token;
+                localStorage.access_token_gm = token;
                 return resolve(response);
             }).catch(error => {
                 return reject(error)

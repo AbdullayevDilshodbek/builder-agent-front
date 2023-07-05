@@ -1,11 +1,13 @@
 import axios from "@/utils/axios";
 
 const state = () => ({
-    cashboxes: []
+    cashboxes: [],
+    otherCashboxes: []
 })
 
 const getters = {
-    getCashboxes: state => state.cashboxes
+    getCashboxes: state => state.cashboxes,
+    getOtherCashboxes: state => state.otherCashboxes
 }
 
 const actions = {
@@ -37,12 +39,24 @@ const actions = {
         } catch (error) {
             return Promise.reject(error)
         }
+    },
+    async fetchOtherCashboxes({ commit }, payload) {
+        try {
+            const res = await axios.get('cashbox/active_cashboxes')
+            commit('SET_OTHER_CASHBOXES_DATA', { data: res.data })
+            return Promise.resolve(res)
+        } catch (error) {
+            return Promise.reject(error)
+        }
     }
 }
 
 const mutations = {
     SET_CASHBOXES_DATA: (state, { data }) => {
         state.cashboxes = data.data
+    },
+    SET_OTHER_CASHBOXES_DATA: (state, { data }) => {
+        state.otherCashboxes = data.data
     }
 }
 

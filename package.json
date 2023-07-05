@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@mdi/font": "^7.2.96",
     "axios": "^0.21.0",
     "v-mask": "^2.3.0",
     "vue": "^2.6.14",
