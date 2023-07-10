@@ -66,7 +66,7 @@
                             :value="cost.is_cashflow"></v-checkbox>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="payThrCost()">To'lash</v-btn>
-                        <v-btn text color="red" @click="dialog = false">Berkitish</v-btn>
+                        <v-btn text color="red" @click="payDialog = false">Berkitish</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
