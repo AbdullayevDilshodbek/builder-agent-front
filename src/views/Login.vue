@@ -31,8 +31,8 @@
           return {
               eye: false,
               user: {
-                  username: 'admin',
-                  password: '123'
+                  username: '',
+                  password: ''
               },
               snackbar: {
                   show: false,
