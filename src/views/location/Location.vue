@@ -97,7 +97,7 @@ export default {
                 })
                 this.last_page = data.meta.last_page
             } catch (error) {
-                // this.$toast.error(Object.values(error.response.data.message)[0][0])
+                // this.$toast.error(error.response.data.message)
             }
         },
         async changeActive(id) {
@@ -106,7 +106,7 @@ export default {
                 this.$toast.success(res.data.message)
                 this.fetchLocation()
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async openDialog(location) {
@@ -139,7 +139,7 @@ export default {
                 this.$toast.success('Amalyot bajarildi')
                 this.dialog = false;
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async updateLocation() {
@@ -154,7 +154,7 @@ export default {
                 this.$toast.success('Amalyot bajarildi')
                 this.dialog = false;
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         }
     }

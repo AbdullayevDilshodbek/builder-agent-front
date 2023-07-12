@@ -227,7 +227,7 @@ export default {
                 const res = await this.$store.dispatch('cashOperation/myCashbox')
                 this.my_cashbox = res.data.data;
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async createOperation() {
@@ -240,7 +240,7 @@ export default {
                 await this.myCashbox()
                 this.$toast.success(res.data.message)
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async fetchOtherCashboxes() {
@@ -249,7 +249,7 @@ export default {
                 await this.fetchOperations()
                 this.$toast.success(res.data.message)
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async save() {
@@ -271,7 +271,7 @@ export default {
                 this.myCashbox()
                 this.$toast.success(res.data.message)
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async cancelMoney(id) {
@@ -281,7 +281,7 @@ export default {
                 this.receivedDialog = false
                 this.$toast.success(res.data.message)
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         filter() {

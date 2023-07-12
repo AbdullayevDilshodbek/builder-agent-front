@@ -179,21 +179,21 @@ export default {
                 })
                 this.last_page = data.meta.last_page
             } catch (error) {
-                // this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async fetchActiveCostTypes() {
             try {
                 await this.$store.dispatch('costType/fetchActiveCostTypes')
             } catch (error) {
-                // this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async fetchActiveLocations() {
             try {
                 await this.$store.dispatch('location/fetchActiveLocations')
             } catch (error) {
-                // this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         openDialog(item = null) {
@@ -223,7 +223,7 @@ export default {
                 await this.fetchCosts()
                 this.$toast.success(res.data.message)
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         filter() {
@@ -251,7 +251,7 @@ export default {
                 this.payDialog = false
                 this.$toast.success(res.data.message)
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async loadExcel() {
@@ -264,7 +264,7 @@ export default {
                 this.excelUrl = res.data.url_
                 this.excelDialog = true
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async downloadExcelFile() {
@@ -273,23 +273,8 @@ export default {
                 window.location.href = fileUrl
                 this.excelDialog = false;
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
-        },
-        test() {
-            axios({
-                url: 'http://localhost:8000/demo.pdf', // File URL Goes Here
-                method: 'GET',
-                responseType: 'blob',
-            }).then((res) => {
-                var FILE = window.URL.createObjectURL(new Blob([res.data]));
-
-                var docUrl = document.createElement('x');
-                docUrl.href = FILE;
-                docUrl.setAttribute('download', 'file.pdf');
-                document.body.appendChild(docUrl);
-                docUrl.click();
-            });
         }
     }
 }

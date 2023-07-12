@@ -103,7 +103,7 @@ export default {
                 await this.fetchCostTypes()
                 this.$toast.success('Amalyot bajarildi')
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         openDialog(costType) {
@@ -132,7 +132,7 @@ export default {
                 this.dialog = false
                 this.costType = {}
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async updateCostType() {
@@ -143,7 +143,7 @@ export default {
                 this.dialog = false
                 this.costType = {}
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         }
     }

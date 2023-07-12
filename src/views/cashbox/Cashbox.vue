@@ -113,7 +113,7 @@ export default {
                 this.fetchCashboxes()
                 this.$toast.success(res.data.message)
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         async createCashbox(){
@@ -126,7 +126,7 @@ export default {
                 this.fetchCashboxes()
                 this.$toast.success(res.data.message)
             } catch (error) {
-                this.$toast.error(Object.values(error.response.data.message)[0][0])
+                this.$toast.error(error.response.data.message)
             }
         },
         save(){
