@@ -48,8 +48,9 @@
                 const user = await this.$store.dispatch('user/getAuth');
                 localStorage.setItem('user', JSON.stringify(user.data.auth))
                 this.$router.push('/')
+                window.location.reload()
             } catch (error) {
-                alert(error.response.data.message)
+                this.$toast.error(error.response.data.message)
             }
           },
           show_password() {

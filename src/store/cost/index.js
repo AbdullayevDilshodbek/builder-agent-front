@@ -38,9 +38,9 @@ const actions = {
             return Promise.reject(error)
         }
     },
-    async loadExcel({}, {search, dates}){
+    async loadExcel({}, {search, dates, api}){
         try {
-            const res = await axios.get('cost/load_table_excel', {
+            const res = await axios.get(api, {
                 params: {
                     search, dates
                 }
