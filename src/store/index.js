@@ -7,6 +7,7 @@ import costType from './costType/index'
 import cost from './cost/index'
 import cashbox from './cashbox/index'
 import cashOperation from './cashOperation/index'
+import report from './report/index'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     costType,
     cashbox,
     cost,
-    cashOperation
+    cashOperation,
+    report
   }
 })

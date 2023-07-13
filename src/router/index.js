@@ -55,6 +55,13 @@ const routes = [
         component: pathView('cashOperation/CashOperation'),
         rules: ['admin', 'agent']
       }
+      ,
+      {
+        path: '/report',
+        name: 'Report',
+        component: pathView('report/Report'),
+        rules: ['admin']
+      }
     ])
   },
   {

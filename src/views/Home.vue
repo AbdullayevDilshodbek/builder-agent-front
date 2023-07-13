@@ -81,6 +81,13 @@ export default {
         title: 'Kassa operatsiyalari',
         path: '/cash-operation',
         rule: ['admin', 'agent']
+      },
+      {
+        id: 7,
+        icon: 'mdi-microsoft-excel',
+        title: 'Xisobotlar',
+        path: '/report',
+        rule: ['admin']
       }
     ],
     user: {}

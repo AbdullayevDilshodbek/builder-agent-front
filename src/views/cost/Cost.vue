@@ -70,7 +70,7 @@
                     </v-card-text>
                     <v-divider></v-divider>
                     <v-card-actions class="justify-end">
-                        <v-checkbox label="Perechesleniya" v-model="cost.is_cashflow"
+                        <v-checkbox v-if="auth.status == 'admin'" label="Perechesleniya" v-model="cost.is_cashflow"
                             :value="cost.is_cashflow"></v-checkbox>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="payThrCost()">To'lash</v-btn>
@@ -104,6 +104,12 @@
         <!-- table -->
         <v-data-table hide-default-footer :headers="headers" :items="costs" dense class="elevation-1" item-key="id"
             loading="true" disable-sort>
+            <template v-slot:item.amount="{ item }">
+                <span>{{ formatMoney.format(item.amount) }}</span>
+            </template>
+            <template v-slot:item.payed="{ item }">
+                <span>{{ formatMoney.format(item.payed) }}</span>
+            </template>
             <template v-slot:item.actions="{ item }">
                 <v-btn v-if="auth.status == 'admin'" @click="openDialog(item)" color="success" dense icon rounded>
                     <v-icon>mdi-border-color</v-icon>
@@ -149,6 +155,10 @@ export default {
             selectedRange: null,
             menu: false,
             excelUrl: '',
+            formatMoney: new Intl.NumberFormat('uz-UZ', {
+                style: 'currency',
+                currency: 'UZS',
+            }),
             excelDialog: false,
             headers: [
                 { text: '#', value: 'id' },

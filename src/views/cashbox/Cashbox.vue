@@ -4,11 +4,19 @@
         <v-col cols="auto">
             <v-dialog transition="dialog-top-transition" max-width="600" v-model="dialog">
                 <v-card>
-                    <v-toolbar color="primary" dark class="text-h4 mb-4">{{ action == 'update' ? 'Yangilash' : "Qo'shish"
-                    }}</v-toolbar>
-                    <v-card-text>
+                    <v-card-title class="text-h4" style="background-color: #499C54; color: #fff;">{{ action == 'update' ?
+                        'Yangilash' : "Qo'shish"
+                    }}</v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text class="mt-2">
                         <v-autocomplete v-model="user.id" :items="users" dense item-value="id" item-text="full_name"
                             :clearable="true" outlined label="Kassir"></v-autocomplete>
+                        <v-text-field dense label="Boshlang'ich summa" outlined v-model="start_value" @keypress="filter()"
+                            min="0" />
+                        <v-card-actions>
+                            <v-spacer /><span style="color: black;" class="my-n2">{{ formatMoney.format(start_value || 0)
+                            }}</span>
+                        </v-card-actions>
                     </v-card-text>
                     <v-divider></v-divider>
                     <v-card-actions class="justify-end">
@@ -39,6 +47,12 @@
         <!-- table -->
         <v-data-table hide-default-footer :headers="headers" :items="cashboxes" class="elevation-1" item-key="id"
             loading="true" disable-sort>
+            <template v-slot:item.balance="{ item }">
+                <span>{{ formatMoney.format(item.balance) }}</span>
+            </template>
+            <template v-slot:item.freezed_value="{ item }">
+                <span>{{ formatMoney.format(item.freezed_value) }}</span>
+            </template>
             <template v-slot:item.actions="{ item }">
                 <!-- <v-btn v-if="auth.status == 'admin'" @click="openDialog(item)" color="success" dense icon rounded>
                     <v-icon>mdi-border-color</v-icon>
@@ -50,7 +64,6 @@
             </template>
         </v-data-table>
         <v-pagination :length="last_page" v-model="page"></v-pagination>
-        {{ user.id }}
     </div>
 </template>
 <script>
@@ -68,9 +81,14 @@ export default {
             page: 1,
             last_page: 1,
             auth: JSON.parse(localStorage.getItem('user')),
+            formatMoney: new Intl.NumberFormat('uz-UZ', {
+                style: 'currency',
+                currency: 'UZS',
+            }),
             dialog: false,
             action: 'update',
             cashbox: {},
+            start_value: null,
             user: {},
             headers: [
                 { text: '#', value: 'id' },
@@ -116,10 +134,11 @@ export default {
                 this.$toast.error(error.response.data.message)
             }
         },
-        async createCashbox(){
+        async createCashbox() {
             try {
                 const payload = {
-                    user_id: this.user.id
+                    user_id: this.user.id,
+                    start_value: Math.abs(this.start_value)
                 }
                 const res = await this.$store.dispatch('cashbox/createCashbox', payload)
                 this.dialog = false
@@ -129,9 +148,19 @@ export default {
                 this.$toast.error(error.response.data.message)
             }
         },
-        save(){
-            if(this.action == 'create'){
-                this.createCashbox()
+        async save() {
+            if (this.action == 'create') {
+                await this.createCashbox()
+            }
+        },
+        filter() {
+            const evt = window.event;
+            let expect = evt.target.value.toString() + evt.key.toString();
+
+            if (!/^[-+]?[0-9]*\.?[0-9]*$/.test(expect)) {
+                evt.preventDefault();
+            } else {
+                return true;
             }
         }
     }

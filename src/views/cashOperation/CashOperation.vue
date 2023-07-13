@@ -54,20 +54,21 @@
                     <v-text-field outlined dense label="Qidirish..." @keyup.enter="fetchOperations()" v-model="search">
                     </v-text-field>
                 </v-col>
-                <v-col cols="2" class="mt-1">
+                <!-- <v-col cols="2" class="mt-1">
                     <v-combobox :items="types" @change="fetchOperations()" label="Tur filteri" hide-selected outlined
                             small-chips v-model="type" append-icon='mdi-close' dense
                             @click:append="clearTypeSearch()" />
-                </v-col>
+                </v-col> -->
                 <v-col cols="2" class="mt-1">
-                    <v-combobox :items="filterBySources" @change="fetchOperations()" item-text="text" label="Amalyot turi filteri" hide-selected outlined
-                            small-chips v-model="filterBySource" append-icon='mdi-close' dense
-                            @click:append="clearSourceSearch()" />
+                    <v-combobox :items="filterBySources" @change="fetchOperations()" item-text="text"
+                        label="Amalyot turi filteri" hide-selected outlined small-chips v-model="filterBySource"
+                        append-icon='mdi-close' dense @click:append="clearSourceSearch()" />
                 </v-col>
                 <v-col cols="3" style="height: 50%; display: flex;">
                     <span style="display: flex; flex-direction: column;">
                         <span style="color: green;">Umumiy balans</span>
-                        <span style="color: green; font-weight: bold; text-align: center;">{{ formatMoney.format(my_cashbox.balance) }}</span>
+                        <span style="color: green; font-weight: bold; text-align: center;">{{
+                            formatMoney.format(my_cashbox.balance) }}</span>
                     </span>
                     <v-spacer></v-spacer>
                     <span style="display: flex; flex-direction: column;">
@@ -91,6 +92,9 @@
         <div v-if="activeTabId == 1">
             <v-data-table hide-default-footer :headers="headers" :items="operations" class="elevation-1" item-key="id"
                 loading="true" disable-sort>
+                <template v-slot:item.amount="{ item }">
+                    <span>{{ formatMoney.format(item.amount) }}</span>
+                </template>
                 <template v-slot:item.actions="{ item }">
                     <v-tooltip top>
                         <template #activator="{ on, attrs }">
@@ -132,7 +136,6 @@ export default {
     data() {
         return {
             tab: null,
-            text: 'Google',
             dates: [],
             page: 1,
             last_page: 1,
@@ -144,6 +147,10 @@ export default {
             operation: {},
             dialog: false,
             action: 'update',
+            formatMoney: new Intl.NumberFormat('uz-UZ', {
+                style: 'currency',
+                currency: 'UZS',
+            }),
             types: ['Kirim', 'Chiqim'],
             type: null,
             sources: ['Bir tomonlama kirim', 'Boshqa kassir'],
@@ -214,11 +221,11 @@ export default {
             } catch (error) {
             }
         },
-        async clearTypeSearch(){
+        async clearTypeSearch() {
             this.type = null;
             await this.fetchOperations()
         },
-        async clearSourceSearch(){
+        async clearSourceSearch() {
             this.filterBySource = null
             await this.fetchOperations()
         },
@@ -247,7 +254,6 @@ export default {
             try {
                 const res = await this.$store.dispatch('cashbox/fetchOtherCashboxes')
                 await this.fetchOperations()
-                this.$toast.success(res.data.message)
             } catch (error) {
                 this.$toast.error(error.response.data.message)
             }
@@ -321,8 +327,8 @@ export default {
                 this.isReceived = false
             }
         },
-        filterSources(){
-            if(this.auth.status == 'admin'){
+        filterSources() {
+            if (this.auth.status == 'admin') {
                 this.sources = ['Bir tomonlama kirim', 'Boshqa kassir']
             } else {
                 this.sources = ['Boshqa kassir']
