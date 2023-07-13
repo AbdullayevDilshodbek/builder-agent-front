@@ -103,9 +103,9 @@
                 <span>{{ formatMoney.format(item.payed) }}</span>
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-btn v-if="auth.status == 'admin'" @click="openDialog(item)" color="success" dense icon rounded>
+                <!-- <v-btn v-if="auth.status == 'admin'" @click="openDialog(item)" color="success" dense icon rounded>
                     <v-icon>mdi-border-color</v-icon>
-                </v-btn>
+                </v-btn> -->
                 <v-tooltip top v-if="item.pay_btn">
                     <template #activator="{ on, attrs }">
                         <v-btn @click="openPayDialog(item)" color="success" dense icon rounded v-on="on" v-bind="attrs">
