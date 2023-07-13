@@ -20,14 +20,6 @@
                     </v-menu>
                 </v-col>
                 <v-spacer></v-spacer>
-                <v-col cols="1" class="mr-15">
-                    <v-btn color="success" @click="loadExcel('report/cost_info')">
-                        <v-icon>
-                            mdi-microsoft-excel
-                        </v-icon>
-                        Umumiy xisobot
-                    </v-btn>
-                </v-col>
                 <v-col cols="2">
                     <v-btn color="success" @click="loadExcel('cost/load_table_excel')">
                         <v-icon>
