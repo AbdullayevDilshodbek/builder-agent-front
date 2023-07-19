@@ -38,6 +38,25 @@
                 </v-col>
             </v-row>
         </div>
+        <!-- Cancel dialog -->
+        <v-col cols="auto" v-if="cancelDialog">
+            <v-dialog transition="dialog-top-transition" max-width="600" v-model="cancelDialog">
+                <v-card>
+                    <v-card-title style="background-color: #499C54; color: beige">№ {{ cost.id }}-xarajatni bekor qilasizmi ?</v-card-title>
+                    <v-card-text>
+                        <v-text-field
+                            label="Izox"
+                            v-model="cost.description"
+                        ></v-text-field>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions class="justify-end">
+                        <v-btn text color="primary" @click="cancelCost()">Tasdiqlash</v-btn>
+                        <v-btn text color="orange" @click="cancelDialog = false">Berkitish</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-col>
         <!-- Excel dialog -->
         <v-col cols="auto" v-if="excelDialog">
             <v-dialog transition="dialog-top-transition" max-width="600" v-model="excelDialog">
@@ -106,6 +125,14 @@
                 <!-- <v-btn v-if="auth.status == 'admin'" @click="openDialog(item)" color="success" dense icon rounded>
                     <v-icon>mdi-border-color</v-icon>
                 </v-btn> -->
+                <v-tooltip top v-if="auth.status == 'admin' && item.status != 'Bekor qilindi'">
+                    <template #activator="{ on, attrs }">
+                        <v-btn @click="openCancelDialog(item)" color="error" dense icon rounded v-on="on" v-bind="attrs">
+                            <v-icon>mdi-close-circle-multiple-outline</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Bekor qilish</span>
+                </v-tooltip>
                 <v-tooltip top v-if="item.pay_btn">
                     <template #activator="{ on, attrs }">
                         <v-btn @click="openPayDialog(item)" color="success" dense icon rounded v-on="on" v-bind="attrs">
@@ -142,6 +169,7 @@ export default {
             auth: JSON.parse(localStorage.getItem('user')),
             dialog: false,
             payDialog: false,
+            cancelDialog: false,
             action: 'update',
             cost: {},
             selectedRange: null,
@@ -213,6 +241,12 @@ export default {
             }
             this.cost = item ?? {}
         },
+        openCancelDialog(item) {
+            this.cancelDialog = true
+            let cost = {...item}
+            cost.description = null
+            this.cost = cost
+        },
         save() {
             if (this.action == 'update') {
 
@@ -265,6 +299,19 @@ export default {
                 })
                 await this.fetchCosts()
                 this.payDialog = false
+                this.$toast.success(res.data.message)
+            } catch (error) {
+                this.$toast.error(error.response.data.message)
+            }
+        },
+        async cancelCost(){
+            try {
+                const res = await this.$store.dispatch('cost/cancelCost', {
+                    id: this.cost.id,
+                    comment: this.cost.description
+                })
+                await this.fetchCosts()
+                this.cancelDialog = false
                 this.$toast.success(res.data.message)
             } catch (error) {
                 this.$toast.error(error.response.data.message)

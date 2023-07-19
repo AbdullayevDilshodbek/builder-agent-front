@@ -38,6 +38,14 @@ const actions = {
             return Promise.reject(error)
         }
     },
+    async cancelCost({}, {id, comment}){
+        try {
+            const res = await axios.put(`cost/cancel_with_payments/${id}`, {comment})
+            return Promise.resolve(res)
+        } catch (error) {
+            return Promise.reject(error)
+        }
+    },
     async loadExcel({}, {search, dates, api}){
         try {
             const res = await axios.get(api, {
