@@ -10,7 +10,8 @@
       <v-divider></v-divider>
 
       <v-list>
-        <v-list-item :style="activePage == link.path ? 'background-color: #d7d7d7' : ''" v-for="(link, index) of links" :key="index" link @click="goPage(link.path)">
+        <v-list-item :style="activePage == link.path ? 'background-color: #d7d7d7' : ''" v-for="(link, index) of links"
+          :key="index" link @click="goPage(link.path)">
           <v-list-item-icon>
             <v-icon>{{ link.icon }}</v-icon>
           </v-list-item-icon>
