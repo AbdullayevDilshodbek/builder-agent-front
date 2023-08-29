@@ -57,7 +57,7 @@
                 </v-btn>
             </template>
         </v-data-table>
-        <v-pagination :length="last_page" v-model="page"></v-pagination>
+        <v-pagination :length="last_page" v-model="page" total-visible="8"></v-pagination>
     </div>
 </template>
 
