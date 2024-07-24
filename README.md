@@ -1,4 +1,4 @@
-# bulder-agent
+# builder-agent
 
 ## Project setup
 ```
